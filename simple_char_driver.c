@@ -40,8 +40,15 @@ ssize_t simple_char_driver_write (struct file *pfile, const char __user *buffer,
 int simple_char_driver_open (struct inode *pinode, struct file *pfile)
 {
 	/* print to the log file that the device is opened and also print the number of times this device has been opened until now*/
+	static int counter = 0;
 
-	
+	if (Device_Open)
+		return -EBUSY;
+	Device_Open++;
+
+	sprintf("simplechardev is opened.");
+	sprintf("It has been opened %d times.", counter++)
+
 	return 0;
 }
 
