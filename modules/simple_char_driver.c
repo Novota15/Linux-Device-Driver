@@ -115,7 +115,7 @@ static int simple_char_driver_init(void)
 	printk(KERN_ALERT "%s function called\n",__FUNCTION__);
 	/* register the device */
 	printk(KERN_ALERT "Within %s function\n",__FUNCTION__);
-	register_chrdev(757, "simple_character_device", &simple_char_driver_file_operations)
+	register_chrdev(757, "simple_character_device", &simple_char_driver_file_operations);
 	return 0;
 }
 
