@@ -22,50 +22,99 @@ int open_count = 0;
 int close_count = 0;
 
 
+// ssize_t simple_char_driver_read (struct file *pfile, char __user *buffer, size_t length, loff_t *offset)
+// {
+// 	/* *buffer is the userspace buffer to where you are writing the data you want to be read from the device file*/
+// 	/* length is the length of the userspace buffer*/
+// 	/* offset will be set to current position of the opened file after read*/
+// 	/* copy_to_user function: source is device_buffer and destination is the userspace buffer *buffer */
+
+// 	int dev_buff_size = strlen(device_buffer);
+// 	// if nothing in the device_buffer, return
+// 	if (dev_buff_size == 0) {
+// 		printk(KERN_ALERT "simplechardev buffer is empty.\n");
+// 		return 0;
+// 	}
+// 	// copy data from offset to end of buffer
+// 	printk(KERN_ALERT "reading from simplechardev.\n");
+// 	copy_to_user(buffer, device_buffer, dev_buff_size);
+// 	// print # of bytes in device buffer
+// 	printk(KERN_ALERT "number of bytes read by simplechardev: %d \n", dev_buff_size);
+
+// 	return 0;
+// }
+
 ssize_t simple_char_driver_read (struct file *pfile, char __user *buffer, size_t length, loff_t *offset)
 {
-	/* *buffer is the userspace buffer to where you are writing the data you want to be read from the device file*/
-	/* length is the length of the userspace buffer*/
-	/* offset will be set to current position of the opened file after read*/
-	/* copy_to_user function: source is device_buffer and destination is the userspace buffer *buffer */
+     if (*offset > BUFFER_SIZE)
+     {
+        printk("offset is greater than buffer size");
+        return 0;
+     }
+     if (*offset + length > BUFFER_SIZE)
+     {
+        length = BUFFER_SIZE - *offset;
+     }
+     if (copy_to_user(buffer, device_buffer + *offset, length) != 0)
+    {
+        return -EFAULT;
+    }
+    *offset += length;
+    return length;
 
-	int dev_buff_size = strlen(device_buffer);
-	// if nothing in the device_buffer, return
-	if (dev_buff_size == 0) {
-		printk(KERN_ALERT "simplechardev buffer is empty.\n");
-		return 0;
-	}
-	// copy data from offset to end of buffer
-	printk(KERN_ALERT "reading from simplechardev.\n");
-	copy_to_user(buffer, device_buffer, dev_buff_size);
-	// print # of bytes in device buffer
-	printk(KERN_ALERT "number of bytes read by simplechardev: %d \n", dev_buff_size);
 
-	return 0;
 }
 
 
-
-ssize_t simple_char_driver_write (struct file *pfile, const char __user *buffer, size_t length, loff_t *offset)
-{
-	/* *buffer is the userspace buffer where you are writing the data you want to be written in the device file*/
-	/* length is the length of the userspace buffer*/
-	/* current position of the opened file*/
-	/* copy_from_user function: destination is device_buffer and source is the userspace buffer *buffer */
-	int dev_buff_size = strlen(device_buffer);
-	// if user space buffer empty, return 0
-	if (length == 0) {
-		return 0;
-	}
-	// set offset to current size of the dev buffer so data isn't overwritten
-	*offset = dev_buff_size;
-	// write from user space buffer to device buffer
-	printk(KERN_ALERT "writing to simplechardev.\n");
-	copy_from_user(device_buffer + *offset, buffer, length);
-	// print # of bytes written from user
-	printk(KERN_ALERT "simplechardev wrote %zu bytes.\n", strlen(buffer));
+// ssize_t simple_char_driver_write (struct file *pfile, const char __user *buffer, size_t length, loff_t *offset)
+// {
+// 	/* *buffer is the userspace buffer where you are writing the data you want to be written in the device file*/
+// 	/* length is the length of the userspace buffer*/
+// 	/* current position of the opened file*/
+// 	/* copy_from_user function: destination is device_buffer and source is the userspace buffer *buffer */
+// 	int dev_buff_size = strlen(device_buffer);
+// 	// if user space buffer empty, return 0
+// 	if (length == 0) {
+// 		return 0;
+// 	}
+// 	// set offset to current size of the dev buffer so data isn't overwritten
+// 	*offset = dev_buff_size;
+// 	// write from user space buffer to device buffer
+// 	printk(KERN_ALERT "writing to simplechardev.\n");
+// 	copy_from_user(device_buffer + *offset, buffer, length);
+// 	// print # of bytes written from user
+// 	printk(KERN_ALERT "simplechardev wrote %zu bytes.\n", strlen(buffer));
 	
-	return length;
+// 	return length;
+// }
+
+ssize_t simple_char_driver_write (struct file *pfile, const char __user *buffer, size_t length, loff_t *offset){
+    /* *buffer is the userspace buffer where you are writing the data you want to be written in the device file*/
+    /* length is the length of the userspace buffer*/
+    /* current position of the opened file*/
+    /* copy_from_user function: destination is device_buffer and source is the userspace buffer *buffer */
+    int nb_bytes_to_copy;
+    if (BUFFER_SIZE - 1 -*offset <= length)
+    {
+        nb_bytes_to_copy= BUFFER_SIZE - 1 -*offset;
+        printk("BUFFER_SIZE - 1 -*offset <= length");
+    }
+    else if (BUFFER_SIZE - 1 - *offset > length)
+    {
+        nb_bytes_to_copy = length;
+        printk("BUFFER_SIZE - 1 -*offset > length");
+    }
+    printk(KERN_INFO "Writing to device\n");
+    if (*offset + length > BUFFER_SIZE)
+    {
+        printk("sorry, can't do that. ");
+        return -1;
+    }
+    printk("about to copy from device");
+    copy_from_user(device_buffer + *offset, buffer, nb_bytes_to_copy);
+    device_buffer[*offset + nb_bytes_to_copy] = '\0';
+    *offset += nb_bytes_to_copy;
+    return nb_bytes_to_copy;
 }
 
 
