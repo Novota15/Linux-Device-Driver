@@ -108,7 +108,7 @@ static int simple_char_driver_init(void)
 	printk(KERN_ALERT "%s function called\n",__FUNCTION__);
 	/* register the device */
 	printk(KERN_ALERT "Within %s function\n",__FUNCTION__);
-	register_chrdev(757, "simple_character_device", &simple_char_driver_file_operations);
+	register_chrdev(240, "simple_character_device", &simple_char_driver_file_operations);
 	return 0;
 }
 
@@ -117,7 +117,7 @@ static void simple_char_driver_exit(void)
 	/* print to the log file that the exit function is called.*/
 	printk(KERN_ALERT "%s function called\n",__FUNCTION__);
 	/* unregister  the device using the register_chrdev() function. */
-	unregister_chrdev(757, "simple_character_device");
+	unregister_chrdev(240, "simple_character_device");
 }
 
 /* add module_init and module_exit to point to the corresponding init and exit function*/
