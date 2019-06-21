@@ -3,7 +3,7 @@
 
 #include<linux/fs.h>
 #include<linux/slab.h>
-#include<asm/uaccess.h>
+//#include<asm/uaccess.h>
 #include<linux/uaccess.h>
 #include<linux/sched.h>
 #include<linux/fs_struct.h>
