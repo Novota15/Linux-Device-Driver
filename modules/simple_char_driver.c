@@ -11,7 +11,6 @@
 /* Define device_buffer and other global data structures you will need here */
 #define DEVICE_NAME "simplechardev"
 static char device_buffer[BUFFER_SIZE]
-static int Device_Open = 0;
 // open/close counts
 int open_count = 0;
 int close_count = 0;
@@ -70,10 +69,6 @@ int simple_char_driver_open (struct inode *pinode, struct file *pfile)
 	open_count++;
 	printk(KERN_ALERT "simplechardev is open.");
 
-	if (Device_Open)
-		return -EBUSY;
-	Device_Open++;
-
 	printk("It has been opened %d times.", open_count);
 
 	return 0;
@@ -106,7 +101,7 @@ struct file_operations simple_char_driver_file_operations = {
     .write = simple_char_driver_write,
     .open = simple_char_driver_open,
     .close = simple_char_driver_close,
-    .llseek = simple_char_driver_seek
+    .llseek = simple_char_driver_seek,
 };
 
 static int simple_char_driver_init(void)
