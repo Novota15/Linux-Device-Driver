@@ -3,8 +3,8 @@
 
 #include<linux/fs.h>
 #include<linux/slab.h>
-#include<asm/uaccess.h>
-//#include<linux/uaccess.h> 
+//#include<asm/uaccess.h>
+#include<linux/uaccess.h> 
 
 #define BUFFER_SIZE 1024
 
@@ -30,7 +30,7 @@ ssize_t simple_char_driver_read (struct file *pfile, char __user *buffer, size_t
 		return 0;
 	}
 	// copy data from offset to end of buffer
-	printk(KERN_ALERT "reading from simplechardev.\n")
+	printk(KERN_ALERT "reading from simplechardev.\n");
 	copy_to_user(buffer, device_buffer, dev_buff_size);
 	// print # of bytes in device buffer
 	printk(KERN_ALERT "number of bytes read by simplechardev: %d \n", dev_buff_size);
