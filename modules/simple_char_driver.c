@@ -3,14 +3,14 @@
 
 #include<linux/fs.h>
 #include<linux/slab.h>
-//#include<asm/uaccess.h>
-#include<linux/uaccess.h> 
+#include<asm/uaccess.h>
+//#include<linux/uaccess.h> 
 
 #define BUFFER_SIZE 1024
 
 /* Define device_buffer and other global data structures you will need here */
 #define DEVICE_NAME "simplechardev"
-static char device_buffer[BUFFER_SIZE]
+static char device_buffer[BUFFER_SIZE];
 // open/close counts
 int open_count = 0;
 int close_count = 0;
