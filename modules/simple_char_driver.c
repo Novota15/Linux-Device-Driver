@@ -4,9 +4,9 @@
 #include<linux/fs.h>
 #include<linux/slab.h>
 #include<asm/uaccess.h>
-#include<linux/uaccess.h> 
-#include<linux-Device-Driver/sched.h>
-#include<linux-Device-Driver/fs_struct.h>
+#include<linux/uaccess.h>
+#include<linux/sched.h
+#include<linux/fs_struct.h>
 
 #define BUFFER_SIZE 1024
 
