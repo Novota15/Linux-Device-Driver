@@ -3,8 +3,8 @@
 
 #include<linux/fs.h>
 #include<linux/slab.h>
-//#include<asm/uaccess.h>
-#include<linux/uaccess.h> 
+#include<asm/uaccess.h>
+// #include<linux/uaccess.h> 
 
 #define BUFFER_SIZE 1024
 
@@ -69,7 +69,7 @@ int simple_char_driver_open (struct inode *pinode, struct file *pfile)
 	open_count++;
 	printk(KERN_ALERT "simplechardev is open.");
 
-	printk("It has been opened %d times.", open_count);
+	printk(KERN_ALERT "It has been opened %d times.", open_count);
 
 	return 0;
 }
@@ -80,7 +80,7 @@ int simple_char_driver_close (struct inode *pinode, struct file *pfile)
 	close_count++;
 	printk(KERN_ALERT "simplechardev is closed.");
 	
-	printk("It has been closed %d times.", close_count);
+	printk(KERN_ALERT "It has been closed %d times.", close_count);
 	
 	return 0;
 }
