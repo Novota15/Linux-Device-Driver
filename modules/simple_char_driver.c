@@ -4,7 +4,7 @@
 #include<linux/fs.h>
 #include<linux/slab.h>
 #include<asm/uaccess.h>
-// #include<linux/uaccess.h> 
+#include<linux/uaccess.h> 
 
 #define BUFFER_SIZE 1024
 
