@@ -6,7 +6,11 @@
 //#include<asm/uaccess.h>
 #include<linux/uaccess.h>
 #include<linux/sched.h>
-#include<linux/fs_struct.h>
+// #include<linux/fs_struct.h>
+
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR("Grant Novota");
+
 
 #define BUFFER_SIZE 1024
 
