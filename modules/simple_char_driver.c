@@ -80,8 +80,6 @@ int simple_char_driver_close (struct inode *pinode, struct file *pfile)
 	close_count++;
 	printk(KERN_ALERT "simplechardev is closed.");
 	
-	Device_Open--;
-	
 	printk("It has been closed %d times.", close_count);
 	
 	return 0;
