@@ -12,7 +12,7 @@ int main() {
 	to create the file to work with our character device. 
 	utilize O_RDWR option which stands for read, write permissions.
 	*/
-	int file = open("/dev/simple_character_device", O_RDWR);
+	int file = open("/dev/simple_char_driver", O_RDWR);
 
 	while(1) {
 		// menu.
