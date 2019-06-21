@@ -98,7 +98,7 @@ struct file_operations simple_char_driver_file_operations = {
 	.read = simple_char_driver_read,
     .write = simple_char_driver_write,
     .open = simple_char_driver_open,
-    .close = simple_char_driver_close,
+    .release = simple_char_driver_close,
     .llseek = simple_char_driver_seek,
 };
 
