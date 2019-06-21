@@ -10,8 +10,11 @@
 
 /* Define device_buffer and other global data structures you will need here */
 #define DEVICE_NAME "simplechardev"
-static int Major;
+static char device_buffer[BUFFER_SIZE]
 static int Device_Open = 0;
+// open/close counts
+int open_count = 0;
+int close_count = 0;
 
 
 ssize_t simple_char_driver_read (struct file *pfile, char __user *buffer, size_t length, loff_t *offset)
@@ -20,6 +23,18 @@ ssize_t simple_char_driver_read (struct file *pfile, char __user *buffer, size_t
 	/* length is the length of the userspace buffer*/
 	/* offset will be set to current position of the opened file after read*/
 	/* copy_to_user function: source is device_buffer and destination is the userspace buffer *buffer */
+
+	int dev_buff_size = strlen(device_buffer);
+	// if nothing in the device_buffer, return
+	if (dev_buff_size == 0) {
+		printk(KERN_ALERT "simplechardev buffer is empty.\n");
+		return 0;
+	}
+	// copy data from offset to end of buffer
+	printk(KERN_ALERT "reading from simplechardev.\n")
+	copy_to_user(buffer, device_buffer, dev_buff_size);
+	// print # of bytes in device buffer
+	printk(KERN_ALERT "number of bytes read by simplechardev: %d \n", dev_buff_size);
 
 	return 0;
 }
@@ -32,7 +47,19 @@ ssize_t simple_char_driver_write (struct file *pfile, const char __user *buffer,
 	/* length is the length of the userspace buffer*/
 	/* current position of the opened file*/
 	/* copy_from_user function: destination is device_buffer and source is the userspace buffer *buffer */
-
+	int dev_buff_size = strlen(device_buffer);
+	// if user space buffer empty, return 0
+	if (length == 0) {
+		return 0;
+	}
+	// set offset to current size of the dev buffer so data isn't overwritten
+	*offset = dev_buff_size;
+	// write from user space buffer to device buffer
+	printk(KERN_ALERT "writing to simplechardev.\n");
+	copy_from_user(device_buffer + *offset, buffer, length);
+	// print # of bytes written from user
+	printk(KERN_ALERT "simplechardev wrote %zu bytes.\n", strlen(buffer));
+	
 	return length;
 }
 
@@ -40,14 +67,14 @@ ssize_t simple_char_driver_write (struct file *pfile, const char __user *buffer,
 int simple_char_driver_open (struct inode *pinode, struct file *pfile)
 {
 	/* print to the log file that the device is opened and also print the number of times this device has been opened until now*/
-	static int counter = 0;
+	open_count++;
+	printk(KERN_ALERT "simplechardev is open.");
 
 	if (Device_Open)
 		return -EBUSY;
 	Device_Open++;
 
-	sprintf("simplechardev is opened.");
-	sprintf("It has been opened %d times.", counter++)
+	printk("It has been opened %d times.", open_count);
 
 	return 0;
 }
@@ -55,6 +82,13 @@ int simple_char_driver_open (struct inode *pinode, struct file *pfile)
 int simple_char_driver_close (struct inode *pinode, struct file *pfile)
 {
 	/* print to the log file that the device is closed and also print the number of times this device has been closed until now*/
+	close_count++;
+	printk(KERN_ALERT "simplechardev is closed.");
+	
+	Device_Open--;
+	
+	printk("It has been closed %d times.", close_count);
+	
 	return 0;
 }
 
@@ -80,10 +114,8 @@ static int simple_char_driver_init(void)
 	/* print to the log file that the init function is called.*/
 	printk(KERN_ALERT "%s function called\n",__FUNCTION__);
 	/* register the device */
-	Major = register_chrdev(0, NAME, &simple_char_driver_file_operations);
-	if (Major < 0) {
-		printk(KERN_ALERT "registering failed")
-	}
+	printk(KERN_ALERT "Within %s function\n",__FUNCTION__);
+	register_chrdev(757, "simple_character_device", &simple_char_driver_file_operations)
 	return 0;
 }
 
@@ -92,6 +124,7 @@ static void simple_char_driver_exit(void)
 	/* print to the log file that the exit function is called.*/
 	printk(KERN_ALERT "%s function called\n",__FUNCTION__);
 	/* unregister  the device using the register_chrdev() function. */
+	unregister_chrdev(757, "simple_character_device");
 }
 
 /* add module_init and module_exit to point to the corresponding init and exit function*/
