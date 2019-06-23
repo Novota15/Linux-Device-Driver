@@ -6,6 +6,15 @@ grno9650@colorado.edu
 
 A simple linux device character driver.
 
+## Contents
+
+```
+├── modules                 
+│   ├── simple_char_driver.c          # module code
+│   ├── Makefile                      # defines module object
+└── userspacetest.c                   # test program code
+```
+
 ## Setup
 
 1. `cd` into the modules directory, which should contain **simple_char_driver.c** and the **Makefile**
