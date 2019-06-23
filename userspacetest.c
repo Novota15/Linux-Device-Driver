@@ -90,7 +90,7 @@ int lseek_device()
 
 int main()
 {
-        int value = 0;
+        char value = '';
         if (access(DEVICE, F_OK) == -1) {
                 printf("module %s not loaded\n", DEVICE);
                 return 0;
@@ -103,7 +103,7 @@ int main()
                     r to read\n\
                     s to seek\n\
                     e to exit\n");
-                scanf("%d", &value);
+                scanf("%c", &value);
                 switch (value) {
                 case 'w' : printf("write option selected\n");
                         file = open(DEVICE, O_RDWR);
