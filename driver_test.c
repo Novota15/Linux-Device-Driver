@@ -8,7 +8,7 @@
 int main() {
 	char option, buffer[BUFFER_SIZE];
 	/* 
-	open file, make sure to have run --sudo mknod -m 777 /dev/simple_character_device c 247 0
+	open file, make sure to have run --sudo mknod -m 777 /dev/simple_character_device c 240 0
 	to create the file to work with our character device. 
 	utilize O_RDWR option which stands for read, write permissions.
 	*/
