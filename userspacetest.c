@@ -3,6 +3,8 @@
 #include <string.h>
 #include <malloc.h>
 
+// code for testing simple_char_driver
+
 #define DEVICE "/dev/simple_char_driver"
 
 int file = 0;
@@ -48,10 +50,9 @@ int read_device()
 
 int lseek_device()
 {
-        int lseek_offset = 0, seek_value = 0;
-        int counter = 0; // to check if function called multiple times or loop
-        counter++;
-        printf("counter value = %d\n", counter);
+        int lseek_offset = 0;
+        int seek_value = 0;
+        
         printf("enter the seek offset\n");
         scanf("%d", &lseek_offset);
         printf("0 for SEEK_SET, 1 for SEEK_CUR and 2 for SEEK_END\n");
@@ -69,7 +70,7 @@ int lseek_device()
                 return 0;
                 break;
         default :
-                printf("unknown  option selected\n");
+                printf("unknown option selected\n");
                 break;
         }
         return 0;
@@ -77,6 +78,7 @@ int lseek_device()
 
 int main()
 {
+        // O_RDWR option stands for read, write permissions.
         char option;
         if (access(DEVICE, F_OK) == -1) {
                 printf("module %s not loaded\n", DEVICE);
@@ -113,7 +115,7 @@ int main()
                         case 'e' : printf("exiting\n");
                                 close(file); /*closing the device*/
                                 return 0;
-                        default : printf("unknown  option selected\n");
+                        default : printf("unknown option selected\n");
                                 break;
                 }
         }
