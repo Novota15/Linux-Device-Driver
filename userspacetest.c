@@ -5,8 +5,8 @@
 
 #define DEVICE "/dev/simple_char_driver"
 
-int debug = 1, fd = 0;
-// Test
+int debug = 1;
+int file = 0;
 int ppos = 0;
 
 int write_device()
@@ -16,17 +16,16 @@ int write_device()
         char *data = (char *)malloc(1024 * sizeof(char));
 
         printf("please enter the data to write into device\n");
-        scanf(" %[^\n]", data); /* a space added after"so that it reads white space,
-                                 %[^\n] is   addeed so that it takes input until new line*/
+        scanf(" %[^\n]", data); //takes input until new line
         write_length = strlen(data);
         if (debug)
                 printf("the length of dat written = %d\n", write_length);
-        ret = write(fd, data, write_length, &ppos);
+        ret = write(file, data, write_length, &ppos);
         if (ret == -1)
                 printf("writting failed\n");
         else
                 printf("writting success\n");
-        if (debug)fflush(stdout); /*not to miss any log*/
+        if (debug)fflush(stdout);
         free(data);
         return 0;
 }
@@ -44,14 +43,14 @@ int read_device()
                 printf("the read length selected is %d\n", read_length, &ppos);
         memset(data, 0, sizeof(data));
         data[0] = '\0';
-        ret = read(fd, data, read_length, &ppos);
+        ret = read(file, data, read_length, &ppos);
         printf("DEVICE_READ : %s\n", data);
         if (ret == -1)
                 printf("reading failed\n");
         else
                 printf("reading success\n");
         if (debug)
-                fflush(stdout);/*not to miss any log*/
+                fflush(stdout);
         free(data);
         return 0;
 }
@@ -59,47 +58,33 @@ int read_device()
 int lseek_device()
 {
         int lseek_offset = 0, seek_value = 0;
-        int counter = 0; /* to check if function called multiple times or loop*/
+        int counter = 0; // to check if function called multiple times or loop
         counter++;
         printf("counter value = %d\n", counter);
         printf("enter the seek offset\n");
         scanf("%d", &lseek_offset);
         if (debug)
                 printf("seek_offset selected is %d\n", lseek_offset);
-        printf("1 for SEEK_SET, 2 for SEEK_CUR and 3 for SEEK_END\n");
+        printf("0 for SEEK_SET, 1 for SEEK_CUR and 2 for SEEK_END\n");
         scanf("%d", &seek_value);
         printf("seek value = %d\n", seek_value);
 
         switch (seek_value) {
-        case 1: lseek(fd, lseek_offset, SEEK_SET);
+        case 0: lseek(file, lseek_offset, 0);
                 return 0;
                 break;
-        case 2: lseek(fd, lseek_offset, SEEK_CUR);
+        case 1: lseek(file, lseek_offset, 1);
                 return 0;
                 break;
-        case 3: lseek(fd, lseek_offset, SEEK_END);
+        case 2: lseek(file, lseek_offset, 2);
                 return 0;
                 break;
         default :
-                printf("unknown  option selected, please enter right one\n");
+                printf("unknown  option selected\n");
                 break;
         }
         if (debug)
-                fflush(stdout);/*not to miss any log*/
-        return 0;
-}
-
-int lseek_write()
-{
-        lseek_device();
-        write_device();
-        return 0;
-}
-
-int lseek_read()
-{
-        lseek_device();
-        read_device();
+                fflush(stdout);
         return 0;
 }
 
@@ -114,36 +99,31 @@ int main()
 
         while (1) {
                 printf("please enter:\n\
-                    \t 1 to write\n\
-                    \t 2 to read\n\
-                    \t 3 to lseek and write\n\
-                    \t 4 to lseek and read\n");
+                    w to write\n\
+                    r to read\n\
+                    s to seek\n\
+                    e to exit\n");
                 scanf("%d", &value);
                 switch (value) {
-                case 1 : printf("write option selected\n");
-                        fd = open(DEVICE, O_RDWR);
+                case 'w' : printf("write option selected\n");
+                        file = open(DEVICE, O_RDWR);
                         write_device();
-                        close(fd); /*closing the device*/
+                        close(file); /*closing the device*/
                         break;
-                case 2 : printf("read option selected\n");
-                        /* dont know why but i am suppoesed to open it for
-                        writing and close it, i cant keep  open and read.
-                        its not working, need to sort out why is that so */
-                        fd = open(DEVICE, O_RDWR);
+                case 'r' : printf("read option selected\n");
+                        file = open(DEVICE, O_RDWR);
                         read_device();
-                        close(fd); /*closing the device*/
+                        close(file); /*closing the device*/
                         break;
-                case 3 : printf("lseek  option selected\n");
-                        fd = open(DEVICE, O_RDWR);
-                        lseek_write();
-                        close(fd); /*closing the device*/
+                case '3' : printf("lseek  option selected\n");
+                        file = open(DEVICE, O_RDWR);
+                        lseek_device();
+                        close(file); /*closing the device*/
                         break;
-                case 4 : printf("lseek  option selected\n");
-                        fd = open(DEVICE, O_RDWR);
-                        lseek_read();
-                        close(fd); /*closing the device*/
-                        break;
-                default : printf("unknown  option selected, please enter right one\n");
+                case 'e' : printf("lseek  option selected\n");
+                        close(file); /*closing the device*/
+                        return 0;
+                default : printf("unknown  option selected\n");
                         break;
                 }
         }
