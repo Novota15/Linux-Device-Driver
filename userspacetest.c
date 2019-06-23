@@ -5,7 +5,6 @@
 
 #define DEVICE "/dev/simple_char_driver"
 
-int debug = 1;
 int file = 0;
 int ppos = 0;
 
@@ -15,17 +14,16 @@ int write_device()
         ssize_t ret;
         char *data = (char *)malloc(1024 * sizeof(char));
 
-        printf("please enter the data to write into device\n");
+        printf("enter data to write into device\n");
         scanf(" %[^\n]", data); //takes input until new line
         write_length = strlen(data);
         if (debug)
-                printf("the length of dat written = %d\n", write_length);
+                printf("length of data written: %d\n", write_length);
         ret = write(file, data, write_length, &ppos);
         if (ret == -1)
-                printf("writting failed\n");
+                printf("writing failed\n");
         else
-                printf("writting success\n");
-        if (debug)fflush(stdout);
+                printf("writing success\n");
         free(data);
         return 0;
 }
@@ -49,8 +47,6 @@ int read_device()
                 printf("reading failed\n");
         else
                 printf("reading success\n");
-        if (debug)
-                fflush(stdout);
         free(data);
         return 0;
 }
@@ -63,8 +59,6 @@ int lseek_device()
         printf("counter value = %d\n", counter);
         printf("enter the seek offset\n");
         scanf("%d", &lseek_offset);
-        if (debug)
-                printf("seek_offset selected is %d\n", lseek_offset);
         printf("0 for SEEK_SET, 1 for SEEK_CUR and 2 for SEEK_END\n");
         scanf("%d", &seek_value);
         printf("seek value = %d\n", seek_value);
@@ -83,8 +77,6 @@ int lseek_device()
                 printf("unknown  option selected\n");
                 break;
         }
-        if (debug)
-                fflush(stdout);
         return 0;
 }
 
@@ -105,26 +97,26 @@ int main()
                     e to exit\n");
                 scanf("%c", &option);
                 switch (option) {
-                case 'w' : printf("write option selected\n");
-                        file = open(DEVICE, O_RDWR);
-                        write_device();
-                        close(file); /*closing the device*/
-                        break;
-                case 'r' : printf("read option selected\n");
-                        file = open(DEVICE, O_RDWR);
-                        read_device();
-                        close(file); /*closing the device*/
-                        break;
-                case '3' : printf("lseek  option selected\n");
-                        file = open(DEVICE, O_RDWR);
-                        lseek_device();
-                        close(file); /*closing the device*/
-                        break;
-                case 'e' : printf("lseek  option selected\n");
-                        close(file); /*closing the device*/
-                        return 0;
-                default : printf("unknown  option selected\n");
-                        break;
+                        case 'w' : printf("write option selected\n");
+                                file = open(DEVICE, O_RDWR);
+                                write_device();
+                                close(file); /*closing the device*/
+                                break;
+                        case 'r' : printf("read option selected\n");
+                                file = open(DEVICE, O_RDWR);
+                                read_device();
+                                close(file); /*closing the device*/
+                                break;
+                        case 's' : printf("lseek  option selected\n");
+                                file = open(DEVICE, O_RDWR);
+                                lseek_device();
+                                close(file); /*closing the device*/
+                                break;
+                        case 'e' : printf("exiting\n");
+                                close(file); /*closing the device*/
+                                return 0;
+                        default : printf("unknown  option selected\n");
+                                break;
                 }
         }
         return 0;
