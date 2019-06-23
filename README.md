@@ -11,7 +11,7 @@ A simple linux device character driver.
 ```
 ├── modules                 
 │   ├── simple_char_driver.c          # module code
-│   ├── Makefile                      # defines module object
+│   └── Makefile                      # defines module object
 └── userspacetest.c                   # test program code
 ```
 
