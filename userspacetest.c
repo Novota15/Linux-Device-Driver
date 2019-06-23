@@ -17,8 +17,6 @@ int write_device()
         printf("enter data to write into device\n");
         scanf(" %[^\n]", data); //takes input until new line
         write_length = strlen(data);
-        if (debug)
-                printf("length of data written: %d\n", write_length);
         ret = write(file, data, write_length, &ppos);
         if (ret == -1)
                 printf("writing failed\n");
@@ -36,9 +34,6 @@ int read_device()
 
         printf("enter the length of the buffer to read\n");
         scanf("%d", &read_length);
-
-        if (debug)
-                printf("the read length selected is %d\n", read_length, &ppos);
         memset(data, 0, sizeof(data));
         data[0] = '\0';
         ret = read(file, data, read_length, &ppos);
