@@ -40,7 +40,7 @@ int read_device()
         memset(data, 0, sizeof(data));
         data[0] = '\0';
         ret = read(file, data, read_length, &ppos);
-        printf("DEVICE_READ : %s\n", data);
+        printf("DEVICE_READ : %s\n", ret);
         if (ret == -1)
                 printf("reading failed\n");
         else
