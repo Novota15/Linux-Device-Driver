@@ -86,7 +86,7 @@ int main()
         } else
                 printf("module %s loaded, will be used\n", DEVICE);
         
-        file = open(DEVICE, O_RDWR);
+        
 
         while (1) {
                 printf("please enter:\n\
@@ -97,21 +97,21 @@ int main()
                 scanf("%c", &option);
                 switch (option) {
                         case 'w' : printf("write option selected\n");
-                                
+                                file = open(DEVICE, O_RDWR);
                                 write_device();
-                                // close(file); /*closing the device*/
+                                close(file); /*closing the device*/
                                 while (getchar() != '\n');
                                 break;
                         case 'r' : printf("read option selected\n");
-                                
+                                file = open(DEVICE, O_RDWR);
                                 read_device();
-                               //  close(file); /*closing the device*/
+                                close(file); /*closing the device*/
                                 while (getchar() != '\n');
                                 break;
                         case 's' : printf("lseek  option selected\n");
-                                
+                                file = open(DEVICE, O_RDWR);
                                 lseek_device();
-                                // close(file); /*closing the device*/
+                                close(file); /*closing the device*/
                                 while (getchar() != '\n');
                                 break;
                         case 'e' : printf("exiting\n");
