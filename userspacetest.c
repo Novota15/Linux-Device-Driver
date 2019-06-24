@@ -10,7 +10,7 @@
 int file = 0;
 int ppos = 0;
 
-file = open(DEVICE, O_RDWR);
+
 int write_device()
 {
         int write_length = 0;
@@ -88,7 +88,7 @@ int main()
                 printf("module %s loaded, will be used\n", DEVICE);
         
         
-        
+        file = open(DEVICE, O_RDWR);
         while (1) {
                 printf("please enter:\n\
                     w to write\n\
